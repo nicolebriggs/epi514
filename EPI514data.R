@@ -1,3 +1,4 @@
+### EPI 514 Research Project ###
 
 #Sample Size/Power
 #number exposed: 25985
@@ -26,7 +27,7 @@ dataDir <- "/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514" #
 # dataDir <- "~/Desktop/epi514/" #caitlin 
 
 #dataraw <- read_xpt("LLCP2019.XPT ") #just do once for file conversion 
-#write.csv(dataraw, paste0(dataDir, "LLCP2019.csv"), row.names = FALSE) #save as cvs 
+#write.csv(dataraw, paste0(dataDir, "LLCP2019.csv"), row.names = FALSE) #save as csv 
 dataCSV <- read.csv(paste0(dataDir, "LLCP2019.csv")) #run from here down after conversion 
 
 # trimming the dataset 
@@ -94,3 +95,6 @@ data$educationFac <- factor(data$education, levels = 1:4,
                             "some college", 
                             "graduated college")
 
+
+# when data cleaning is done, save clean dataset: 
+#write.csv(data, paste0(dataDir, "epi514dataClean.csv"), row.names = FALSE) #save as csv 
