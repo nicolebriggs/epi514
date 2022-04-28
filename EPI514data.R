@@ -1,4 +1,16 @@
 
+#Sample Size/Power
+#number exposed: 25985
+#number unexposed: 78563
+library(epiR)
+epi.ssxsectn(
+  pdexp1= NA, 
+  pdexp0 = .55, #expected prevalence in unexposed 
+  n = 210000, #sample size 
+  power = 0.8, 
+  r= 25985/ 78563, #ratio e/u
+)
+
 
 rm(list = ls())
 # install.packages("survey")
@@ -14,22 +26,6 @@ dataDir <- "/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514"
 dataraw <- read_xpt("LLCP2019.XPT ")
 write.csv(dataraw, paste0(dataDir, "LLCP2019.XPT"), row.names = FALSE)
 dataraw <- read.csv(paste0(dataDir, "LLCP2019.XPT"))
-
-library(epiR)
-#Sample Size/Power
-#number exposed: 25985
-#number unexposed: 78563
-
-epi.ssxsectn(
-  pdexp1= NA, 
-  pdexp0 = .55, #expected prevalence in unexposed 
-  n = 210000, #sample size 
-  power = 0.8, 
-  r= 25985/ 78563, #ratio e/u
-)
-
-
-
 
 data <- dataraw[, c("_PSU", "_LLCPWT", "_AGE_G" )]
 names(data) #view variable names 
