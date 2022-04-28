@@ -24,9 +24,10 @@ setwd("/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514") #nico
 dataDir <- "/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514" #nicole 
 # setwd("~/Desktop/epi514/") #caitlin 
 # dataDir <- "~/Desktop/epi514/" #caitlin 
-dataraw <- read_xpt("LLCP2019.XPT ")
-write.csv(dataraw, paste0(dataDir, "LLCP2019.csv"), row.names = FALSE)
-dataCSV <- read.csv(paste0(dataDir, "LLCP2019.csv"))
+
+#dataraw <- read_xpt("LLCP2019.XPT ") #just do once for file conversion 
+#write.csv(dataraw, paste0(dataDir, "LLCP2019.csv"), row.names = FALSE) #save as cvs 
+dataCSV <- read.csv(paste0(dataDir, "LLCP2019.csv")) #run from here down after conversion 
 
 # trimming the dataset 
 data <- dataCSV[, c("X_STATE", "X_PSU", "X_STSTR", "X_LLCPWT",
