@@ -41,3 +41,5 @@ data$male[data$X_SEX==2] <- 0
 data$male[data$X_SEX==1] <- 1
 
 
+
+
