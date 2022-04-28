@@ -95,6 +95,5 @@ data$educationFac <- factor(data$education, levels = 1:4,
                             "some college", 
                             "graduated college")
 
-
 # when data cleaning is done, save clean dataset: 
-#write.csv(data, paste0(dataDir, "epi514dataClean.csv"), row.names = FALSE) #save as csv 
+#write.csv(data, paste0(dataDir, "epi514dataClean.csv"), row.names = FALSE) #save as csv
