@@ -74,4 +74,3 @@ data$raceFac <- factor(data$raceFac, levels = 1:8,
                                   "Native Hawaiian non-Hispanic",
                                   "Other race non-Hispanic", "Multiracial non-Hispanic",
                                   "Hispanic"))
-
