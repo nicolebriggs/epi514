@@ -20,8 +20,10 @@ rm(list = ls())
 # library("Tmisc")
 library(tidyverse)
 library(haven)
-setwd("/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514")
-dataDir <- "/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514"
+setwd("/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514") #nicole
+dataDir <- "/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514" #nicole 
+# setwd("~/Desktop/epi514/") #caitlin 
+# dataDir <- "~/Desktop/epi514/" #caitlin 
 dataraw <- read_xpt("LLCP2019.XPT ")
 write.csv(dataraw, paste0(dataDir, "LLCP2019.csv"), row.names = FALSE)
 dataCSV <- read.csv(paste0(dataDir, "LLCP2019.csv"))
@@ -74,3 +76,20 @@ data$raceFac <- factor(data$raceFac, levels = 1:8,
                                   "Native Hawaiian non-Hispanic",
                                   "Other race non-Hispanic", "Multiracial non-Hispanic",
                                   "Hispanic"))
+# income
+data$income = data$INCOME2
+data$income[data$income==77 | data$income==99] <- NA
+data$incomeFac <- factor(data$income, levels = 1:9,
+                         labels = c("<$10,000", "$10,000 - $14,999", 
+                         "$15,000- $19,999", "$20,000-$24,999", 
+                         "$25,000-$34,999", "$35,000 - $49,999", 
+                         "$50,00 - $74,999", "$75,000+"))
+# education 
+data$education = data$X_EDUCAG
+data$education[data$education==9] <- NA 
+data$educationFac <- factor(data$education, levels = 1:4,
+                            "some high school", 
+                            "graduated high school", 
+                            "some college", 
+                            "graduated college")
+
