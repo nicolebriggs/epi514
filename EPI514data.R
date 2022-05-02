@@ -16,15 +16,17 @@ epi.ssxsectn(
 rm(list = ls())
 # install.packages("survey")
 # install.packages("Tmisc")
-# library("survey")
-# library("epiR")
-# library("Tmisc")
+library("survey")
+library("epiR")
+library("Tmisc")
 library(tidyverse)
 library(haven)
-setwd("/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514") #nicole
-dataDir <- "/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514" #nicole 
+#setwd("/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514") #nicole
+#dataDir <- "/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514" #nicole 
 # setwd("~/Desktop/epi514/") #caitlin 
 # dataDir <- "~/Desktop/epi514/" #caitlin 
+setwd("/Users/winnieyeung/Documents/SCHOOL/GRADSCHOOL/EPI514/")
+dataDir<- "/Users/winnieyeung/Documents/SCHOOL/GRADSCHOOL/EPI514/"
 
 #dataraw <- read_xpt("LLCP2019.XPT ") #just do once for file conversion 
 #write.csv(dataraw, paste0(dataDir, "LLCP2019.csv"), row.names = FALSE) #save as csv 
@@ -45,22 +47,30 @@ summary(data)
 ## data cleaning/recoding  
 # exposure divorce
 data$divorce = data$ACEDIVRC
-data$divorce[data$divorce==7 | data$divorce==9] <- NA
+data$divorce[data$divorce==7 | data$divorce==8| data$divorce==9] <- NA
 data$divorce[data$divorce==1] <- 1
 data$divorce[data$divorce==2] <- 0
+data$divorce <- factor(data$ACEDIVRC, 
+                      levels = 1:2, 
+                      labels = c("Experienced parental divorce/separation", "Did not experience parental divorce/separation"))
+
 # outcome flu shot 
 data$vaccinated = data$FLUSHOT7
 data$vaccinated[data$FLUSHOT7==7 | data$FLUSHOT7==9] <- NA
 data$vaccinated[data$FLUSHOT7==1] <- 1
 data$vaccinated[data$FLUSHOT7==2] <- 0
+data$vaccinated <- factor(data$FLUSHOT7, 
+                       levels = 1:2, 
+                       labels = c("Yes", "No"))
+
 # sex 
-data$sex = data$X_SEX
+data$sex = data$SEXVAR
 data$sex[data$sex==9] <- NA
-data$sexFac <- factor(data$X_SEX, 
+data$sexFac <- factor(data$SEXVAR, 
                       levels = 1:2, 
                       labels = c("Male", "Female"))
-data$male[data$X_SEX==2] <- 0
-data$male[data$X_SEX==1] <- 1
+data$male[data$SEXVAR==2] <- 0
+data$male[data$SEXVAR==1] <- 1
 # age 
 data$age5yrFac = data$X_AGE_G
 data$age5yrFac[data$age5yrFac==14] <- NA
@@ -69,6 +79,12 @@ data$age5yrFac <- factor(data$age5yrFac, levels = 1:13,
                                     "35-39", "40-44", "45-49",
                                     "50-54", "55-59", "60-64",
                                     "65-69", "70-74", "75-79", "80+"))
+data$ageFac = data$X_AGE_G
+data$ageFac[data$ageFac==14] <- NA
+data$ageFac <- factor(data$ageFac, levels = 1:6,
+                         labels = c("18-24", "25-34",
+                                    "35-44", "45-54", "55-64",
+                                    "65 or older"))
 # race/ethnicity 
 data$raceFac = data$X_RACE
 data$raceFac[data$raceFac==9] <- NA 
@@ -81,21 +97,37 @@ data$raceFac <- factor(data$raceFac, levels = 1:8,
 # income
 data$income = data$INCOME2
 data$income[data$income==77 | data$income==99] <- NA
-data$incomeFac <- factor(data$income, levels = 1:9,
+data$incomeFac <- factor(data$income, levels = 1:8,
                          labels = c("<$10,000", "$10,000 - $14,999", 
-                         "$15,000- $19,999", "$20,000-$24,999", 
-                         "$25,000-$34,999", "$35,000 - $49,999", 
-                         "$50,00 - $74,999", "$75,000+"))
+                                    "$15,000- $19,999", "$20,000-$24,999", 
+                                    "$25,000-$34,999", "$35,000 - $49,999", 
+                                    "$50,00 - $74,999", "$75,000+"))
 # education 
 data$education = data$X_EDUCAG
 data$education[data$education==9] <- NA 
 data$educationFac <- factor(data$education, levels = 1:4,
-                            "some high school", 
-                            "graduated high school", 
-                            "some college", 
-                            "graduated college")
+                            labels = c("Some high school", 
+                                       "Graduated high school", 
+                                       "Some college", 
+                                       "Graduated college"))
 
 # when data cleaning is done, save clean dataset: 
-#write.csv(data, paste0(dataDir, "epi514dataClean.csv"), row.names = FALSE) #save as csv
+write.csv(data, paste0(dataDir, "epi514dataClean.csv"), row.names = FALSE) #save as csv
 
 #nicole is testing - can delete 
+
+# table 1 
+#install.packages("table1")
+library(table1)
+#data <- read.csv(paste0(dataDir, "epi514dataClean.csv")) #run from here down after cleaning
+label(data$ageFac) <- "Age (years)"
+label(data$sexFac) <- "Sex"
+label(data$raceFac) <- "Race"
+label(data$educationFac) <- "Education"
+label(data$incomeFac) <- "Income"
+
+
+#creating table in R
+table1(~ ageFac + sexFac +raceFac + educationFac + incomeFac | divorce, data=data, overall="Total")
+
+
