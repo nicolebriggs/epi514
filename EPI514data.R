@@ -64,21 +64,23 @@ data$vaccinated <- factor(data$FLUSHOT7,
                        labels = c("Yes", "No"))
 
 # sex 
-data$sex = data$SEXVAR
+data$sex = data$X_SEX
 data$sex[data$sex==9] <- NA
-data$sexFac <- factor(data$SEXVAR, 
+data$sexFac <- factor(data$X_SEX, 
                       levels = 1:2, 
                       labels = c("Male", "Female"))
-data$male[data$SEXVAR==2] <- 0
-data$male[data$SEXVAR==1] <- 1
-# age 
-data$age5yrFac = data$X_AGE_G
+data$male[data$X_SEX==2] <- 0
+data$male[data$X_SEX==1] <- 1
+# age 5 year categories 
+data$age5yrFac = data$X_AGEG5YR
 data$age5yrFac[data$age5yrFac==14] <- NA
 data$age5yrFac <- factor(data$age5yrFac, levels = 1:13,
                          labels = c("18-24", "25-29", "30-34",
                                     "35-39", "40-44", "45-49",
                                     "50-54", "55-59", "60-64",
                                     "65-69", "70-74", "75-79", "80+"))
+
+#age 10 year categories
 data$ageFac = data$X_AGE_G
 data$ageFac[data$ageFac==14] <- NA
 data$ageFac <- factor(data$ageFac, levels = 1:6,
