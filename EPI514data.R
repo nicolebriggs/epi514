@@ -34,7 +34,7 @@ dataCSV <- read.csv(paste0(dataDir, "LLCP2019.csv")) #run from here down after c
 
 # trimming the dataset 
 data <- dataCSV[, c("X_STATE", "X_PSU", "X_STSTR", "X_LLCPWT",
-                    "ACEDIVRC", "SEXVAR", 
+                    "ACEDIVRC", "X_SEX", 
                     "X_AGEG5YR", "X_AGE80", "X_AGE_G",
                     "INCOME2", "X_INCOMG", "EDUCA", "X_EDUCAG", 
                     "X_HISPANC", "X_RACE", "X_RACEGR3",
