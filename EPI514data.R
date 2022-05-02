@@ -25,8 +25,8 @@ library(haven)
 #dataDir <- "/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514" #nicole 
 # setwd("~/Desktop/epi514/") #caitlin 
 # dataDir <- "~/Desktop/epi514/" #caitlin 
-setwd("/Users/winnieyeung/Documents/SCHOOL/GRADSCHOOL/EPI514/")
-dataDir<- "/Users/winnieyeung/Documents/SCHOOL/GRADSCHOOL/EPI514/"
+#setwd("/Users/winnieyeung/Documents/SCHOOL/GRADSCHOOL/EPI514/")
+#dataDir<- "/Users/winnieyeung/Documents/SCHOOL/GRADSCHOOL/EPI514/"
 
 #dataraw <- read_xpt("LLCP2019.XPT ") #just do once for file conversion 
 #write.csv(dataraw, paste0(dataDir, "LLCP2019.csv"), row.names = FALSE) #save as csv 
@@ -71,6 +71,7 @@ data$sexFac <- factor(data$X_SEX,
                       labels = c("Male", "Female"))
 data$male[data$X_SEX==2] <- 0
 data$male[data$X_SEX==1] <- 1
+
 # age 5 year categories 
 data$age5yrFac = data$X_AGEG5YR
 data$age5yrFac[data$age5yrFac==14] <- NA
@@ -116,7 +117,7 @@ data$educationFac <- factor(data$education, levels = 1:4,
 # when data cleaning is done, save clean dataset: 
 write.csv(data, paste0(dataDir, "epi514dataClean.csv"), row.names = FALSE) #save as csv
 
-#nicole is testing - can delete 
+
 
 # table 1 
 #install.packages("table1")
@@ -129,7 +130,17 @@ label(data$educationFac) <- "Education"
 label(data$incomeFac) <- "Income"
 
 
+#divorce variable recoded so that experienced divorce is on left side of table (experienced = 0, not experienced = 1)
+data$divorcetable = data$ACEDIVRC
+data$divorcetable[data$divorce==7 | data$divorce==8| data$divorce==9] <- NA
+data$divorcetable[data$divorce==1] <- 0
+data$divorcetable[data$divorce==2] <- 1
+data$divorcetable <- factor(data$ACEDIVRC, 
+                       levels = 1:2, 
+                       labels = c("Experienced parental divorce/separation", "Did not experience parental divorce/separation"))
+
+
 #creating table in R
-table1(~ ageFac + sexFac +raceFac + educationFac + incomeFac | divorce, data=data, overall="Total")
+table1(~ ageFac + sexFac +raceFac + educationFac + incomeFac | divorcetable, data=data, overall="Total", render.missing=NULL)
 
 
