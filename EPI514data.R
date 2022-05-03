@@ -104,7 +104,7 @@ data$incomeFac <- factor(data$income, levels = 1:8,
                          labels = c("<$10,000", "$10,000 - $14,999", 
                                     "$15,000- $19,999", "$20,000-$24,999", 
                                     "$25,000-$34,999", "$35,000 - $49,999", 
-                                    "$50,00 - $74,999", "$75,000+"))
+                                    "$50,000 - $74,999", "$75,000+"))
 # education 
 data$education = data$X_EDUCAG
 data$education[data$education==9] <- NA 
@@ -158,5 +158,6 @@ library("dplyr")
     tbl_svysummary(
       by = divorcetable,
       include = c(ageFac, sexFac, raceFac, educationFac, incomeFac),
-      statistic = list(all_categorical() ~ "{n_unweighted} ({p}%)")
+      statistic = list(all_categorical() ~ "{n_unweighted} ({p}%)"), 
+      missing = "always", missing_text = "Missing"
     ))
