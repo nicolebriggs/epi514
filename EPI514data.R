@@ -140,9 +140,9 @@ data$divorcetable <- factor(data$ACEDIVRC,
                        labels = c("Experienced parental divorce/separation", "Did not experience parental divorce/separation"))
 
 
-#creating table in R
+#creating unweighted table in R
 
-table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorcetable, data=data, overall="Total", render.missing=NULL)
+table1<- table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorcetable, data=data, overall="Total", render.missing=NULL)
 #table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorce, data=data, render.missing=NULL, render.categorical="FREQ (PCTnoNA%)", overall="Total")
 # second option also removes NAs from % calculations 
 
