@@ -160,3 +160,11 @@ library("dplyr")
       include = c(ageFac, sexFac, raceFac, educationFac, incomeFac),
       statistic = list(all_categorical() ~ "{n_unweighted} ({p}%)")
     ))
+
+library(tableone)
+library(survey)
+
+options(survey.lonely.psu = "adjust")
+design <- svydesign(data = data, id=~X_PSU, strata = ~X_STSTR, weight = ~X_LLCPWT, nest = TRUE)
+tab1 <- svyCreateTableOne(vars = c("ageFac", "sexFac", "raceFac", "educationFac", "incomeFac"),
+                          strata = "divorcetable", data = design)
