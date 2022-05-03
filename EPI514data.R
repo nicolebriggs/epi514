@@ -141,6 +141,22 @@ data$divorcetable <- factor(data$ACEDIVRC,
 
 
 #creating table in R
-table1(~ ageFac + sexFac +raceFac + educationFac + incomeFac | divorcetable, data=data, overall="Total", render.missing=NULL)
 
+table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorcetable, data=data, overall="Total", render.missing=NULL)
+#table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorce, data=data, render.missing=NULL, render.categorical="FREQ (PCTnoNA%)", overall="Total")
+# second option also removes NAs from % calculations 
 
+#weighted percents? 
+
+#install.packages("survey")
+library("survey")
+#install.packages("gtsummary")
+library("gtsummary")
+#install.packages("dplyr")
+library("dplyr") 
+(results <- survey::svydesign(~ 1, data = data, weights = ~ X_LLCPWT) %>%
+    tbl_svysummary(
+      by = divorcetable,
+      include = c(ageFac, sexFac, raceFac, educationFac, incomeFac),
+      statistic = list(all_categorical() ~ "{n_unweighted} ({p}%)")
+    ))
