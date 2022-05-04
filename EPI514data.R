@@ -157,16 +157,9 @@ library("dplyr")
 
 # getting weighted %s including missing values 
 (survey <- survey::svydesign(~ 1, data = data, weights = ~ X_LLCPWT))
-prop.table(svytable(~ageFac, design=survey, na.action=na.pass, exclude = NULL, addNA=T))
-prop.table(svytable(~sexFac, design=survey, na.action=na.pass, exclude = NULL, addNA=T))
-prop.table(svytable(~raceFac, design=survey, na.action=na.pass, exclude = NULL, addNA=T))
-prop.table(svytable(~educationFac, design=survey, na.action=na.pass, exclude = NULL, addNA=T))
-prop.table(svytable(~incomeFac, design=survey, na.action=na.pass, exclude = NULL, addNA=T))
-
-#install.packages("tableone")
-# library("tableone")
-# options(survey.lonely.psu = "adjust")
-# design <- svydesign(data = data, id=~X_PSU, strata = ~X_STSTR, weight = ~X_LLCPWT, nest = TRUE)
-# tab1 <- svyCreateTableOne(vars = c("ageFac", "sexFac", "raceFac", "educationFac", "incomeFac"),
-#                           strata = "divorcetable", includeNA = TRUE, data = design)
+prop.table(svytable(~ageFac+divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
+prop.table(svytable(~sexFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
+prop.table(svytable(~raceFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
+prop.table(svytable(~educationFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
+prop.table(svytable(~incomeFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
 
