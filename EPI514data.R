@@ -94,10 +94,9 @@ data$raceFac[data$raceFac==9] <- NA
 data$raceFac <- factor(data$raceFac, levels = 1:8,
                        labels = c("White", "Black",
                                   "American Indian/Alaska Native", "Asian",
-                                  "Native Hawaiian",
+                                  "Native Hawaiian/Pacific Islander",
                                   "Other", "Multiracial",
                                   "Hispanic"))
-# income
 data$income = data$INCOME2
 data$income[data$income==77 | data$income==99] <- NA
 data$incomeFac <- factor(data$income, levels = 1:8,
