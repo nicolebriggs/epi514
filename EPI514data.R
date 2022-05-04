@@ -92,10 +92,10 @@ data$ageFac <- factor(data$ageFac, levels = 1:6,
 data$raceFac = data$X_RACE
 data$raceFac[data$raceFac==9] <- NA 
 data$raceFac <- factor(data$raceFac, levels = 1:8,
-                       labels = c("White non-Hispanic", "Black non-Hispanic",
-                                  "AI/AN non-Hispanic", "Asian non-Hispanic",
-                                  "Native Hawaiian non-Hispanic",
-                                  "Other race non-Hispanic", "Multiracial non-Hispanic",
+                       labels = c("White", "Black",
+                                  "American Indian/Alaska Native", "Asian",
+                                  "Native Hawaiian",
+                                  "Other", "Multiracial",
                                   "Hispanic"))
 # income
 data$income = data$INCOME2
@@ -115,9 +115,7 @@ data$educationFac <- factor(data$education, levels = 1:4,
                                        "Graduated college"))
 
 # when data cleaning is done, save clean dataset: 
-write.csv(data, paste0(dataDir, "epi514dataClean.csv"), row.names = FALSE) #save as csv
-
-
+write.csv(data, paste0(dataDir, "epi514dataClean.csv"), row.names = FALSE) #save as csv 
 
 # table 1 
 #install.packages("table1")
@@ -125,10 +123,9 @@ library(table1)
 #data <- read.csv(paste0(dataDir, "epi514dataClean.csv")) #run from here down after cleaning
 label(data$ageFac) <- "Age (years)"
 label(data$sexFac) <- "Sex"
-label(data$raceFac) <- "Race"
-label(data$educationFac) <- "Education"
+label(data$raceFac) <- "Race/Ethnicity"
+label(data$educationFac) <- "Highest Level of Education Completed"
 label(data$incomeFac) <- "Annual Household Income"
-
 
 #divorce variable recoded so that experienced divorce is on left side of table (experienced = 0, not experienced = 1)
 data$divorcetable = data$ACEDIVRC
@@ -136,21 +133,13 @@ data$divorcetable[data$divorce==7 | data$divorce==8| data$divorce==9] <- NA
 data$divorcetable[data$divorce==1] <- 0
 data$divorcetable[data$divorce==2] <- 1
 data$divorcetable <- factor(data$ACEDIVRC, 
-                       levels = 1:2, 
-                       labels = c("Experienced parental divorce/separation", "Did not experience parental divorce/separation"))
+                            levels = 1:2, 
+                            labels = c("Experienced parental divorce/separation", "Did not experience parental divorce/separation"))
 
-
-#creating unweighted table in R
-
-
-table1 <- table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorcetable, data=data, overall="Total", render.missing=NULL)
-
-
-
+#creating table in R
+table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorcetable, data=data, overall="Total", render.missing=NULL)
 #table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorce, data=data, render.missing=NULL, render.categorical="FREQ (PCTnoNA%)", overall="Total")
 # second option also removes NAs from % calculations 
-
-#weighted percents? 
 
 #install.packages("survey")
 library("survey")
@@ -166,12 +155,18 @@ library("dplyr")
       missing = "always", missing_text = "Missing"
     ))
 
+# getting weighted %s including missing values 
+(survey <- survey::svydesign(~ 1, data = data, weights = ~ X_LLCPWT))
+prop.table(svytable(~ageFac, design=survey, na.action=na.pass, exclude = NULL, addNA=T))
+prop.table(svytable(~sexFac, design=survey, na.action=na.pass, exclude = NULL, addNA=T))
+prop.table(svytable(~raceFac, design=survey, na.action=na.pass, exclude = NULL, addNA=T))
+prop.table(svytable(~educationFac, design=survey, na.action=na.pass, exclude = NULL, addNA=T))
+prop.table(svytable(~incomeFac, design=survey, na.action=na.pass, exclude = NULL, addNA=T))
 
-library(tableone)
-library(survey)
-
-options(survey.lonely.psu = "adjust")
-design <- svydesign(data = data, id=~X_PSU, strata = ~X_STSTR, weight = ~X_LLCPWT, nest = TRUE)
-tab1 <- svyCreateTableOne(vars = c("ageFac", "sexFac", "raceFac", "educationFac", "incomeFac"),
-                          strata = "divorcetable", data = design)
+#install.packages("tableone")
+# library("tableone")
+# options(survey.lonely.psu = "adjust")
+# design <- svydesign(data = data, id=~X_PSU, strata = ~X_STSTR, weight = ~X_LLCPWT, nest = TRUE)
+# tab1 <- svyCreateTableOne(vars = c("ageFac", "sexFac", "raceFac", "educationFac", "incomeFac"),
+#                           strata = "divorcetable", includeNA = TRUE, data = design)
 
