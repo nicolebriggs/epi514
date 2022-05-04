@@ -102,9 +102,9 @@ data$income = data$INCOME2
 data$income[data$income==77 | data$income==99] <- NA
 data$incomeFac <- factor(data$income, levels = 1:8,
                          labels = c("<$10,000", "$10,000 - $14,999", 
-                                    "$15,000- $19,999", "$20,000-$24,999", 
-                                    "$25,000-$34,999", "$35,000 - $49,999", 
-                                    "$50,00 - $74,999", "$75,000+"))
+                                    "$15,000 - $19,999", "$20,000 - $24,999", 
+                                    "$25,000 - $34,999", "$35,000 - $49,999", 
+                                    "$50,000 - $74,999", "$75,000+"))
 # education 
 data$education = data$X_EDUCAG
 data$education[data$education==9] <- NA 
@@ -127,7 +127,7 @@ label(data$ageFac) <- "Age (years)"
 label(data$sexFac) <- "Sex"
 label(data$raceFac) <- "Race"
 label(data$educationFac) <- "Education"
-label(data$incomeFac) <- "Income"
+label(data$incomeFac) <- "Annual Household Income"
 
 
 #divorce variable recoded so that experienced divorce is on left side of table (experienced = 0, not experienced = 1)
@@ -142,7 +142,11 @@ data$divorcetable <- factor(data$ACEDIVRC,
 
 #creating unweighted table in R
 
-table1<- table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorcetable, data=data, overall="Total", render.missing=NULL)
+
+table1 <- table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorcetable, data=data, overall="Total", render.missing=NULL)
+
+
+
 #table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorce, data=data, render.missing=NULL, render.categorical="FREQ (PCTnoNA%)", overall="Total")
 # second option also removes NAs from % calculations 
 
@@ -158,8 +162,10 @@ library("dplyr")
     tbl_svysummary(
       by = divorcetable,
       include = c(ageFac, sexFac, raceFac, educationFac, incomeFac),
-      statistic = list(all_categorical() ~ "{n_unweighted} ({p}%)")
+      statistic = list(all_categorical() ~ "{n_unweighted} ({p}%)"), 
+      missing = "always", missing_text = "Missing"
     ))
+
 
 library(tableone)
 library(survey)
@@ -168,3 +174,4 @@ options(survey.lonely.psu = "adjust")
 design <- svydesign(data = data, id=~X_PSU, strata = ~X_STSTR, weight = ~X_LLCPWT, nest = TRUE)
 tab1 <- svyCreateTableOne(vars = c("ageFac", "sexFac", "raceFac", "educationFac", "incomeFac"),
                           strata = "divorcetable", data = design)
+
