@@ -157,10 +157,10 @@ library("dplyr")
 
 # getting weighted %s including missing values 
 (survey <- survey::svydesign(~ 1, data = data, weights = ~ X_LLCPWT))
-prop.table(svytable(~ageFac+divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
-prop.table(svytable(~sexFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
-prop.table(svytable(~raceFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
-prop.table(svytable(~educationFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
-prop.table(svytable(~incomeFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
+prop.table(svytable(~ageFac+divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
+prop.table(svytable(~sexFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
+prop.table(svytable(~raceFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
+prop.table(svytable(~educationFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
+prop.table(svytable(~incomeFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
 
 
