@@ -34,7 +34,7 @@ dataCSV <- read.csv(paste0(dataDir, "LLCP2019.csv")) #run from here down after c
 
 # trimming the dataset 
 data <- dataCSV[, c("X_STATE", "X_PSU", "X_STSTR", "X_LLCPWT",
-                    "ACEDIVRC", "X_SEX", 
+                    "ACEDIVRC", "SEXVAR", 
                     "X_AGEG5YR", "X_AGE80", "X_AGE_G",
                     "INCOME2", "X_INCOMG", "EDUCA", "X_EDUCAG", 
                     "X_HISPANC", "X_RACE", "X_RACEGR3",
@@ -64,13 +64,13 @@ data$vaccinated <- factor(data$FLUSHOT7,
                        labels = c("Yes", "No"))
 
 # sex 
-data$sex = data$X_SEX
+data$sex = data$SEXVAR
 data$sex[data$sex==9] <- NA
-data$sexFac <- factor(data$X_SEX, 
+data$sexFac <- factor(data$SEXVAR, 
                       levels = 1:2, 
                       labels = c("Male", "Female"))
-data$male[data$X_SEX==2] <- 0
-data$male[data$X_SEX==1] <- 1
+data$male[data$SEXVAR==2] <- 0
+data$male[data$SEXVAR==1] <- 1
 
 # age 5 year categories 
 data$age5yrFac = data$X_AGEG5YR
@@ -109,7 +109,7 @@ data$incomeFac <- factor(data$income, levels = 1:8,
 data$education = data$X_EDUCAG
 data$education[data$education==9] <- NA 
 data$educationFac <- factor(data$education, levels = 1:4,
-                            labels = c("Some high school", 
+                            labels = c("Did not graduate high school", 
                                        "Graduated high school", 
                                        "Some college", 
                                        "Graduated college"))
