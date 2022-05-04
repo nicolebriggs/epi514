@@ -163,3 +163,4 @@ prop.table(svytable(~raceFac+ divorcetable, design=survey, na.action=na.pass, ex
 prop.table(svytable(~educationFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
 prop.table(svytable(~incomeFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)
 
+
