@@ -162,4 +162,14 @@ prop.table(svytable(~raceFac+ divorcetable, design=survey, na.action=na.pass, ex
 prop.table(svytable(~educationFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
 prop.table(svytable(~incomeFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
 
+# weighted %s without missing values 
+prop.table(svytable(~raceFac+ divorcetable, design=survey),margin=2)*100
+prop.table(svytable(~educationFac+ divorcetable, design=survey),margin=2)*100
+prop.table(svytable(~incomeFac+ divorcetable, design=survey),margin=2)*100
+
+# raw missing %s 
+prop.table(with(data, table(raceFac, divorcetable, useNA = "ifany")), margin=2)*100
+prop.table(with(data, table(educationFac, divorcetable, useNA = "ifany")), margin=2)*100
+prop.table(with(data, table(incomeFac, divorcetable, useNA = "ifany")), margin=2)*100
+
 
