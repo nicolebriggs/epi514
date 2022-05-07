@@ -172,4 +172,13 @@ prop.table(with(data, table(raceFac, divorcetable, useNA = "ifany")), margin=2)*
 prop.table(with(data, table(educationFac, divorcetable, useNA = "ifany")), margin=2)*100
 prop.table(with(data, table(incomeFac, divorcetable, useNA = "ifany")), margin=2)*100
 
+#Table 2
+#unadjusted
+library(epiR)
+
+unadjusted <- with(data, table(divorce, vaccinated))
+epi.2by2(unadjusted)
+
+#adjusted <- with(data, table(divorce, vaccinated, sexFac,ageFac, raceFac, incomeFac, educationFac ))
+epi.2by2
 
