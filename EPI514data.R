@@ -114,12 +114,17 @@ data$educationFac <- factor(data$education, levels = 1:4,
                                        "Graduated college"))
 
 # when data cleaning is done, save clean dataset: 
-write.csv(data, paste0(dataDir, "epi514dataClean.csv"), row.names = FALSE) #save as csv 
+#CSV: write.csv(data, paste0(dataDir, "epi514dataClean.csv"), row.names = FALSE) #save as csv 
+
+saveRDS(data,file="epi514_brfss2019Clean.rds")
+
 
 # table 1 
 #install.packages("table1")
 library(table1)
 #data <- read.csv(paste0(dataDir, "epi514dataClean.csv")) #run from here down after cleaning
+data <- readRDS(file="epi514_brfss2019Clean.rds")#run from here down after cleaning
+
 label(data$ageFac) <- "Age (years)"
 label(data$sexFac) <- "Sex"
 label(data$raceFac) <- "Race/Ethnicity"
