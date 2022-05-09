@@ -110,20 +110,19 @@ data$education[data$education==9] <- NA
 data$educationFac <- factor(data$education, levels = 1:4,
                             labels = c("Did not graduate high school", 
                                        "Graduated high school", 
-                                       "Some college", 
+                                       "Attended college", 
                                        "Graduated college"))
 
 # when data cleaning is done, save clean dataset: 
 #CSV: write.csv(data, paste0(dataDir, "epi514dataClean.csv"), row.names = FALSE) #save as csv 
 
 saveRDS(data,file="epi514_brfss2019Clean.rds")
-
+#data <- read.csv(paste0(dataDir, "epi514dataClean.csv")) #run from here down after cleaning
+data <- readRDS(file="epi514_brfss2019Clean.rds")#run from here down after cleaning
 
 # table 1 
 #install.packages("table1")
 library(table1)
-#data <- read.csv(paste0(dataDir, "epi514dataClean.csv")) #run from here down after cleaning
-data <- readRDS(file="epi514_brfss2019Clean.rds")#run from here down after cleaning
 
 label(data$ageFac) <- "Age (years)"
 label(data$sexFac) <- "Sex"
@@ -277,7 +276,7 @@ strat_education_1 <- with(subset(data, educationFac == "Did not graduate high sc
                           table(divorce, vaccinated))
 strat_education_2 <- with(subset(data, educationFac == "Graduated high school"),
                           table(divorce, vaccinated))
-strat_education_3 <- with(subset(data, educationFac == "Some college"),
+strat_education_3 <- with(subset(data, educationFac == "Attended college"),
                           table(divorce, vaccinated))
 strat_education_4 <- with(subset(data, educationFac == "Graduated college"),
                           table(divorce, vaccinated))
