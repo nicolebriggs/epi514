@@ -182,3 +182,131 @@ epi.2by2(unadjusted)
 #adjusted <- with(data, table(divorce, vaccinated, sexFac,ageFac, raceFac, incomeFac, educationFac ))
 epi.2by2
 
+## Assessing confounding 
+# Evaluate: age, sex, race, education, and income
+
+# age
+strat_age <- with(data,
+                  table(divorce, vaccinated, ageFac))
+# sex
+strat_sex <- with(data,
+                  table(divorce, vaccinated, sexFac))
+# race/ethnicity
+strat_race <- with(data,
+                   table(divorce, vaccinated, raceFac))
+# education 
+strat_education <- with(data,
+                        table(divorce, vaccinated, educationFac))
+# income
+strat_income <- with(data,
+                     table(divorce, vaccinated, incomeFac))
+# run confounder analysis
+epi.2by2(strat_age)
+epi.2by2(strat_sex)
+epi.2by2(strat_race)
+epi.2by2(strat_education)
+epi.2by2(strat_income)
+
+## Effect modification
+# Evaluate: age, sex, race, education, and income
+
+# age
+strat_age_1 <- with(subset(data, ageFac == "18-24"),
+                    table(divorce, vaccinated))
+strat_age_2 <- with(subset(data, ageFac == "25-24"),
+                    table(divorce, vaccinated))
+strat_age_3 <- with(subset(data, ageFac == "34-44"),
+                    table(divorce, vaccinated))
+strat_age_4 <- with(subset(data, ageFac == "45-54"),
+                    table(divorce, vaccinated))
+strat_age_5 <- with(subset(data, ageFac == "55-64"),
+                    table(divorce, vaccinated))
+strat_age_6 <- with(subset(data, ageFac == "65+"),
+                    table(divorce, vaccinated))
+# age EM analysis
+epi.2by2(strat_age_1) 
+epi.2by2(strat_age_2) 
+epi.2by2(strat_age_3) 
+epi.2by2(strat_age_4) 
+epi.2by2(strat_age_5) 
+epi.2by2(strat_age_6) 
+
+# sex 
+strat_sex_1 <- with(subset(data, sexFac == "Male"),
+                    table(divorce, vaccinated))
+strat_sex_2 <- with(subset(data, sexFac == "Female"),
+                    table(divorce, vaccinated))
+# sex EM analysis
+epi.2by2(strat_sex_1) 
+epi.2by2(strat_sex_2) 
+
+# race/ethnicity
+strat_race_1 <- with(subset(data, raceFac == "White"),
+                     table(divorce, vaccinated))
+strat_race_2 <- with(subset(data, raceFac == "Black"),
+                     table(divorce, vaccinated))
+strat_race_3 <- with(subset(data, raceFac == "American Indian/Alaska Native"),
+                     table(divorce, vaccinated))
+strat_race_4 <- with(subset(data, raceFac == "Asian"),
+                     table(divorce, vaccinated))
+strat_race_5 <- with(subset(data, raceFac == "Native Hawaiian/Pacific Islander"),
+                     table(divorce, vaccinated))
+strat_race_6 <- with(subset(data, raceFac == "Other"),
+                     table(divorce, vaccinated))
+strat_race_7 <- with(subset(data, raceFac == "Multiracial"),
+                     table(divorce, vaccinated))
+strat_race_8 <- with(subset(data, raceFac == "Hispanic"),
+                     table(divorce, vaccinated))
+# race/ethnicity EM analysis
+epi.2by2(strat_race_1)
+epi.2by2(strat_race_2) 
+epi.2by2(strat_race_3) 
+epi.2by2(strat_race_4) 
+epi.2by2(strat_race_5) 
+epi.2by2(strat_race_6) 
+epi.2by2(strat_race_7)
+epi.2by2(strat_race_8) 
+
+# education  
+strat_education_1 <- with(subset(data, educationFac == "Did not graduate high school"),
+                          table(divorce, vaccinated))
+strat_education_2 <- with(subset(data, educationFac == "Graduated high school"),
+                          table(divorce, vaccinated))
+strat_education_3 <- with(subset(data, educationFac == "Some college"),
+                          table(divorce, vaccinated))
+strat_education_4 <- with(subset(data, educationFac == "Graduated college"),
+                          table(divorce, vaccinated))
+# education EM analysis
+epi.2by2(strat_income_1)
+epi.2by2(strat_income_2) 
+epi.2by2(strat_income_3) 
+epi.2by2(strat_income_4) 
+
+# income 
+strat_income_1 <- with(subset(data, incomeFac == "<$10,000"),
+                       table(divorce, vaccinated))
+strat_income_2 <- with(subset(data, incomeFac == "$10,000 - $14,999"),
+                       table(divorce, vaccinated))
+strat_income_3 <- with(subset(data, incomeFac == "$15,000 - $19,999"),
+                       table(divorce, vaccinated))
+strat_income_4 <- with(subset(data, incomeFac == "$20,000 - $24,999"),
+                       table(divorce, vaccinated))
+strat_income_5 <- with(subset(data, incomeFac == "$25,000 - $34,999"),
+                       table(divorce, vaccinated))
+strat_income_6 <- with(subset(data, incomeFac == "$35,000 - $49,999"),
+                       table(divorce, vaccinated))
+strat_income_7 <- with(subset(data, incomeFac == "$50,000 - $74,999"),
+                       table(divorce, vaccinated))
+strat_income_8 <- with(subset(data, incomeFac == "$75,000+"),
+                       table(divorce, vaccinated))
+# income EM analysis
+epi.2by2(strat_income_1)
+epi.2by2(strat_income_2) 
+epi.2by2(strat_income_3) 
+epi.2by2(strat_income_4) 
+epi.2by2(strat_income_5) 
+epi.2by2(strat_income_6) 
+epi.2by2(strat_income_7)
+epi.2by2(strat_income_8) 
+
+
