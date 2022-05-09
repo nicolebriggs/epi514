@@ -227,6 +227,7 @@ strat_age_6 <- with(subset(data, ageFac == "65 or older"),
 # age EM analysis
 epi.2by2(strat_age_1) 
 epi.2by2(strat_age_2) 
+epi.2by2(strat_age_3) 
 epi.2by2(strat_age_4) 
 epi.2by2(strat_age_5) 
 epi.2by2(strat_age_6) 
