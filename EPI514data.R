@@ -21,8 +21,8 @@ library("epiR")
 library("Tmisc")
 library(tidyverse)
 library(haven)
-#setwd("/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514") #nicole
-#dataDir <- "/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514" #nicole 
+#setwd("/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514/") #nicole
+#dataDir <- "/Users/NicoleBriggs 1/Documents/MPH Coursework/SpringQ2022/epi514/" #nicole 
 # setwd("~/Desktop/epi514/") #caitlin 
 # dataDir <- "~/Desktop/epi514/" #caitlin 
 #setwd("/Users/winnieyeung/Documents/SCHOOL/GRADSCHOOL/EPI514/")
@@ -184,9 +184,6 @@ library(epiR)
 unadjusted <- with(data, table(divorce, vaccinated))
 epi.2by2(unadjusted)
 
-#adjusted <- with(data, table(divorce, vaccinated, sexFac,ageFac, raceFac, incomeFac, educationFac ))
-epi.2by2
-
 ## Assessing confounding 
 # Evaluate: age, sex, race, education, and income
 
@@ -206,11 +203,11 @@ strat_education <- with(data,
 strat_income <- with(data,
                      table(divorce, vaccinated, incomeFac))
 # run confounder analysis
-epi.2by2(strat_age)
-epi.2by2(strat_sex)
-epi.2by2(strat_race)
-epi.2by2(strat_education)
-epi.2by2(strat_income)
+epi.2by2(strat_age) 
+epi.2by2(strat_sex) 
+epi.2by2(strat_race) 
+epi.2by2(strat_education) 
+epi.2by2(strat_income) 
 
 ## Effect modification
 # Evaluate: age, sex, race, education, and income
@@ -218,20 +215,19 @@ epi.2by2(strat_income)
 # age
 strat_age_1 <- with(subset(data, ageFac == "18-24"),
                     table(divorce, vaccinated))
-strat_age_2 <- with(subset(data, ageFac == "25-24"),
+strat_age_2 <- with(subset(data, ageFac == "25-34"),
                     table(divorce, vaccinated))
-strat_age_3 <- with(subset(data, ageFac == "34-44"),
+strat_age_3 <- with(subset(data, ageFac == "35-44"),
                     table(divorce, vaccinated))
 strat_age_4 <- with(subset(data, ageFac == "45-54"),
                     table(divorce, vaccinated))
 strat_age_5 <- with(subset(data, ageFac == "55-64"),
                     table(divorce, vaccinated))
-strat_age_6 <- with(subset(data, ageFac == "65+"),
+strat_age_6 <- with(subset(data, ageFac == "65 or older"),
                     table(divorce, vaccinated))
 # age EM analysis
 epi.2by2(strat_age_1) 
 epi.2by2(strat_age_2) 
-epi.2by2(strat_age_3) 
 epi.2by2(strat_age_4) 
 epi.2by2(strat_age_5) 
 epi.2by2(strat_age_6) 
@@ -282,10 +278,10 @@ strat_education_3 <- with(subset(data, educationFac == "Some college"),
 strat_education_4 <- with(subset(data, educationFac == "Graduated college"),
                           table(divorce, vaccinated))
 # education EM analysis
-epi.2by2(strat_income_1)
-epi.2by2(strat_income_2) 
-epi.2by2(strat_income_3) 
-epi.2by2(strat_income_4) 
+epi.2by2(strat_education_1)
+epi.2by2(strat_education_2) 
+epi.2by2(strat_education_3) 
+epi.2by2(strat_education_4) 
 
 # income 
 strat_income_1 <- with(subset(data, incomeFac == "<$10,000"),
