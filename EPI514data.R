@@ -310,4 +310,15 @@ epi.2by2(strat_income_6)
 epi.2by2(strat_income_7)
 epi.2by2(strat_income_8) 
 
+#adjusted
+
+data$confounders <- case_when(!is.na(data$ageFac)&
+                                !is.na(data$sexFac) &
+                                !is.na(data$educationFac)~
+                                paste0(data$ageFac, "_", data$sexFac, "_", data$incomeFac))
+
+with(data, table(confounders, ageFac))
+
+adjusted_pr<- with(data, table(divorce, vaccinated, confounders))
+epi.2by2(adjusted_pr)
 
