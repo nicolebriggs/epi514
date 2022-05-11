@@ -310,15 +310,59 @@ epi.2by2(strat_income_6)
 epi.2by2(strat_income_7)
 epi.2by2(strat_income_8) 
 
-#adjusted
+##adjusted
 
+#collapse confounder category race:
+
+#data$raceFac_c = data$X_RACE
+#data$raceFac_c[data$raceFac_c==9] <- NA 
+#data$raceFac_c[data$raceFac_c==1] <- 0
+#data$raceFac_c[data$raceFac_c==2 |data$raceFac_c==3 | data$raceFac_c==4 | data$raceFac_c==5 |data$raceFac_c==6 | data$raceFac_c==7 | data$raceFac_c==8] <- 1
+#data$raceFac_c <- factor(data$raceFac_c, levels = 0:1,
+#                       labels = c("White", "POC"))
+
+
+data$raceFac_c = data$X_RACE
+data$raceFac_c[data$raceFac_c==9] <- NA 
+data$raceFac_c[data$raceFac_c==1] <- 0
+data$raceFac_c[data$raceFac_c==2 ]<- 1
+data$raceFac_c[data$raceFac_c==3 | data$raceFac_c==4 | data$raceFac_c==5 |data$raceFac_c==6 | data$raceFac_c==7] <-2
+data$raceFac_c[data$raceFac_c==8] <- 3
+data$raceFac_c <- factor(data$raceFac_c, levels = 0:4,
+                         labels = c("White", "Black",
+                                    "Other", "Hispanic"))
+with(data, table(raceFac_c, X_RACE))
+
+#DOESNT WORK
+#data$raceFac_c = data$X_RACE
+#data$raceFac_c[data$raceFac_c==9] <- NA 
+#data$raceFac_c[data$raceFac_c==1] <- 0 #white
+#data$raceFac_c[data$raceFac_c==2]<- 1 #black
+#data$raceFac_c[data$raceFac_c==3]<-2 #AI
+#data$raceFac_c[data$raceFac_c==4 | data$raceFac_c==5]<-3 #asian +hawaiian
+#data$raceFac_c[data$raceFac_c==6]<-4 #other
+#data$raceFac_c[data$raceFac_c==7] <-5 #multiracial
+#data$raceFac_c[data$raceFac_c==8] <- 6 #hispanic
+#data$raceFac_c <- factor(data$raceFac_c, levels = 0:6,
+#                         labels = c("White", "Black", "AI", "Asian + H",
+#                                    "Other","Multiracial", "Hispanic"))
+with(data, table(raceFac_c, X_RACE))
+
+#create one variable for confounders
 data$confounders <- case_when(!is.na(data$ageFac)&
                                 !is.na(data$sexFac) &
-                                !is.na(data$educationFac)~
-                                paste0(data$ageFac, "_", data$sexFac, "_", data$incomeFac))
+                                !is.na(data$educationFac) &
+                                !is.na(data$raceFac_c) &
+                                !is.na(data$incomeFac)~
+                                paste0(data$ageFac, "_", data$sexFac, "_", data$incomeFac, "_", data$raceFac_c, "_", data$incomeFac))
 
-with(data, table(confounders, ageFac))
+#with(data, table(confounders, ageFac))
 
 adjusted_pr<- with(data, table(divorce, vaccinated, confounders))
-epi.2by2(adjusted_pr)
+epi.2by2(adjusted_pr) #adjusted PR value
+
+
+
+
+
 
