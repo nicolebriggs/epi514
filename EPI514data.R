@@ -44,6 +44,7 @@ data <- dataCSV[, c("X_STATE", "X_PSU", "X_STSTR", "X_LLCPWT",
 names(data)
 summary(data)
 
+
 ## data cleaning/recoding  
 # exposure divorce
 data$divorce = data$ACEDIVRC
@@ -62,6 +63,16 @@ data$vaccinated[data$FLUSHOT7==2] <- 0
 data$vaccinated <- factor(data$FLUSHOT7, 
                        levels = 1:2, 
                        labels = c("Yes", "No"))
+
+#Variable to sum up missing (for discussion section)
+data$missing_new[data$ACEDIVRC == 7 | data$ACEDIVRC == 8 |data$ACEDIVRC == 9 | data$FLUSHOT7 == 7 | data$FLUSHOT7 == 9]<-1
+table(data$missing_new)
+
+
+#excluding people who don't have data for vaccination
+#remove rows with NA in specific columns of data frame
+data <- data[complete.cases(data[ , c('vaccinated')]), ]
+
 
 # sex 
 data$sex = data$SEXVAR
@@ -91,12 +102,15 @@ data$ageFac <- factor(data$ageFac, levels = 1:6,
 # race/ethnicity 
 data$raceFac = data$X_RACE
 data$raceFac[data$raceFac==9] <- NA 
-data$raceFac <- factor(data$raceFac, levels = 1:8,
-                       labels = c("White", "Black",
-                                  "American Indian/Alaska Native", "Asian",
-                                  "Native Hawaiian/Pacific Islander",
-                                  "Other", "Multiracial",
-                                  "Hispanic"))
+data$raceFac[data$raceFac==1] <- 1
+data$raceFac[data$raceFac==2 ]<- 2
+data$raceFac[data$raceFac==3 | data$raceFac==4 | data$raceFac==5 |data$raceFac==6 | data$raceFac==7] <-3
+data$raceFac[data$raceFac==8] <- 4
+data$raceFac <- factor(data$raceFac, levels = 1:4,
+                         labels = c("White", "Black",
+                                    "Other", "Hispanic"))
+with(data, table(raceFac, X_RACE))
+
 data$income = data$INCOME2
 data$income[data$income==77 | data$income==99] <- NA
 data$incomeFac <- factor(data$income, levels = 1:8,
@@ -140,7 +154,7 @@ data$divorcetable <- factor(data$ACEDIVRC,
                             labels = c("Experienced parental divorce/separation", "Did not experience parental divorce/separation"))
 
 #creating table in R
-table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorcetable, data=data, overall="Total", render.missing=NULL)
+table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorcetable, data=data, overall="Total")
 #table1(~ ageFac + sexFac + raceFac + educationFac + incomeFac | divorce, data=data, render.missing=NULL, render.categorical="FREQ (PCTnoNA%)", overall="Total")
 # second option also removes NAs from % calculations 
 
@@ -150,6 +164,7 @@ library("survey")
 library("gtsummary")
 #install.packages("dplyr")
 library("dplyr") 
+#didn't use this:
 (results <- survey::svydesign(~ 1, data = data, weights = ~ X_LLCPWT) %>%
     tbl_svysummary(
       by = divorcetable,
@@ -167,9 +182,12 @@ prop.table(svytable(~educationFac+ divorcetable, design=survey, na.action=na.pas
 prop.table(svytable(~incomeFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
 
 # weighted %s without missing values 
+prop.table(svytable(~ageFac+ divorcetable, design=survey),margin=2)*100
+prop.table(svytable(~sexFac+ divorcetable, design=survey),margin=2)*100
 prop.table(svytable(~raceFac+ divorcetable, design=survey),margin=2)*100
 prop.table(svytable(~educationFac+ divorcetable, design=survey),margin=2)*100
 prop.table(svytable(~incomeFac+ divorcetable, design=survey),margin=2)*100
+
 
 # raw missing %s 
 prop.table(with(data, table(raceFac, divorcetable, useNA = "ifany")), margin=2)*100
@@ -312,57 +330,47 @@ epi.2by2(strat_income_8)
 
 ##adjusted
 
-#collapse confounder category race:
-
-#data$raceFac_c = data$X_RACE
-#data$raceFac_c[data$raceFac_c==9] <- NA 
-#data$raceFac_c[data$raceFac_c==1] <- 0
-#data$raceFac_c[data$raceFac_c==2 |data$raceFac_c==3 | data$raceFac_c==4 | data$raceFac_c==5 |data$raceFac_c==6 | data$raceFac_c==7 | data$raceFac_c==8] <- 1
-#data$raceFac_c <- factor(data$raceFac_c, levels = 0:1,
-#                       labels = c("White", "POC"))
-
-
-data$raceFac_c = data$X_RACE
-data$raceFac_c[data$raceFac_c==9] <- NA 
-data$raceFac_c[data$raceFac_c==1] <- 0
-data$raceFac_c[data$raceFac_c==2 ]<- 1
-data$raceFac_c[data$raceFac_c==3 | data$raceFac_c==4 | data$raceFac_c==5 |data$raceFac_c==6 | data$raceFac_c==7] <-2
-data$raceFac_c[data$raceFac_c==8] <- 3
-data$raceFac_c <- factor(data$raceFac_c, levels = 0:4,
-                         labels = c("White", "Black",
-                                    "Other", "Hispanic"))
-with(data, table(raceFac_c, X_RACE))
-
-#DOESNT WORK
-#data$raceFac_c = data$X_RACE
-#data$raceFac_c[data$raceFac_c==9] <- NA 
-#data$raceFac_c[data$raceFac_c==1] <- 0 #white
-#data$raceFac_c[data$raceFac_c==2]<- 1 #black
-#data$raceFac_c[data$raceFac_c==3]<-2 #AI
-#data$raceFac_c[data$raceFac_c==4 | data$raceFac_c==5]<-3 #asian +hawaiian
-#data$raceFac_c[data$raceFac_c==6]<-4 #other
-#data$raceFac_c[data$raceFac_c==7] <-5 #multiracial
-#data$raceFac_c[data$raceFac_c==8] <- 6 #hispanic
-#data$raceFac_c <- factor(data$raceFac_c, levels = 0:6,
-#                         labels = c("White", "Black", "AI", "Asian + H",
-#                                    "Other","Multiracial", "Hispanic"))
-with(data, table(raceFac_c, X_RACE))
-
 #create one variable for confounders
 data$confounders <- case_when(!is.na(data$ageFac)&
                                 !is.na(data$sexFac) &
                                 !is.na(data$educationFac) &
-                                !is.na(data$raceFac_c) &
+                                !is.na(data$raceFac) &
                                 !is.na(data$incomeFac)~
-                                paste0(data$ageFac, "_", data$sexFac, "_", data$incomeFac, "_", data$raceFac_c, "_", data$incomeFac))
+                                paste0(data$ageFac, "_", data$sexFac, "_", data$incomeFac, "_", data$raceFac, "_", data$incomeFac))
 
 #with(data, table(confounders, ageFac))
 
 adjusted_pr<- with(data, table(divorce, vaccinated, confounders))
 epi.2by2(adjusted_pr) #adjusted PR value
 
+#Adjusted effect modification
+data$em <- case_when(!is.na(data$sexFac) &
+                                !is.na(data$educationFac) &
+                                !is.na(data$raceFac) &
+                                !is.na(data$incomeFac)~
+                                paste0(data$sexFac, "_", data$incomeFac, "_", data$raceFac, "_", data$incomeFac))
 
+strat_age_1_em <- with(subset(data, ageFac == "18-24"),
+                       table(divorce, vaccinated, em))
+epi.2by2(strat_age_1_em)
 
+strat_age_2_em <- with(subset(data, ageFac == "25-34"),
+                       table(divorce, vaccinated, em))
+epi.2by2(strat_age_2_em) 
 
+strat_age_3_em <- with(subset(data, ageFac == "35-44"),
+                       table(divorce, vaccinated, em))
+epi.2by2(strat_age_3_em) 
 
+strat_age_4_em <- with(subset(data, ageFac == "45-54"),
+                       table(divorce, vaccinated, em))
+epi.2by2(strat_age_4_em) 
+
+strat_age_5_em <- with(subset(data, ageFac == "55-64"),
+                       table(divorce, vaccinated, em))
+epi.2by2(strat_age_5_em) 
+
+strat_age_6_em <- with(subset(data, ageFac == "65 or older"),
+                       table(divorce, vaccinated, em))
+epi.2by2(strat_age_6_em) 
 
