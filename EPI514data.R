@@ -30,7 +30,7 @@ library(haven)
 
 #dataraw <- read_xpt("LLCP2019.XPT ") #just do once for file conversion 
 #write.csv(dataraw, paste0(dataDir, "LLCP2019.csv"), row.names = FALSE) #save as csv 
-dataCSV <- read.csv(paste0(dataDir, "LLCP2019.csv")) #run from here down after conversion 
+#dataCSV <- read.csv(paste0(dataDir, "LLCP2019.csv")) #run from here down after conversion 
 
 # trimming the dataset 
 data <- dataCSV[, c("X_STATE", "X_PSU", "X_STSTR", "X_LLCPWT",
@@ -174,12 +174,12 @@ library("dplyr")
     ))
 
 # getting weighted %s including missing values 
-(survey <- survey::svydesign(~ 1, data = data, weights = ~ X_LLCPWT))
-prop.table(svytable(~ageFac+divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
-prop.table(svytable(~sexFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
-prop.table(svytable(~raceFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
-prop.table(svytable(~educationFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
-prop.table(svytable(~incomeFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
+#(survey <- survey::svydesign(~ 1, data = data, weights = ~ X_LLCPWT))
+#prop.table(svytable(~ageFac+divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
+#prop.table(svytable(~sexFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
+#prop.table(svytable(~raceFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
+#prop.table(svytable(~educationFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
+#prop.table(svytable(~incomeFac+ divorcetable, design=survey, na.action=na.pass, exclude = NULL, addNA=T),margin=2)*100
 
 # weighted %s without missing values 
 prop.table(svytable(~ageFac+ divorcetable, design=survey),margin=2)*100
@@ -373,4 +373,36 @@ epi.2by2(strat_age_5_em)
 strat_age_6_em <- with(subset(data, ageFac == "65 or older"),
                        table(divorce, vaccinated, em))
 epi.2by2(strat_age_6_em) 
+
+#Table 3 N count
+n <- with(data,
+     table(divorce, ageFac))
+
+#Figure 1
+library("ggplot2")
+
+boxLabels = c("18 - 24", "25 - 34", "35 - 44", "45 - 54", "55 - 64", "65+")
+
+df <- data.frame(yAxis = length(boxLabels):1,
+                 boxOdds = 
+                   c(0.84, 
+                     0.85, 0.88, 0.91, 0.94, 0.95),
+                 boxCILow = 
+                   c(0.77, 0.79, 0.84, 0.86,
+                     0.90, 0.93),
+                 boxCIHigh = 
+                   c(0.93, 0.90, 0.93, 0.95, 
+                     0.97, 0.97))
+
+(p <- ggplot(df, aes(x = boxOdds, y = boxLabels)) +
+    geom_vline(aes(xintercept = 1), size = .25, linetype = 'solid') +
+    geom_errorbarh(aes(xmax = boxCIHigh, xmin = boxCILow), size = .5, height = 
+                     .2, color = 'gray50') +
+    geom_point(size = 3.5, color = 'black') +
+    theme_classic(base_size = 16) +
+    theme(panel.grid.minor = element_blank(),axis.text=element_text(size=14),
+          axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16)) +
+    ylab('Age Group (years)') +
+    xlab('Prevalence Ratio'))
+
 
