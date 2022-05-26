@@ -399,10 +399,9 @@ df <- data.frame(yAxis = length(boxLabels):1,
     geom_vline(aes(xintercept = 1), size = .25, linetype = 'solid') +
     geom_errorbarh(aes(xmax = boxCIHigh, xmin = boxCILow), size = .5, height = 
                      .2, color = 'gray50') +
-    geom_point(size = 3.5, color = 'black') +
-    theme_classic(base_size = 16) +
-    theme(panel.grid.minor = element_blank(),axis.text=element_text(size=14),
-          axis.title.x = element_text(size = 16), axis.title.y = element_text(size = 16)) +
+    geom_point(size = 3.5, color = 'darkorchid4') +
+    theme_classic(base_size = 20) +
+#    theme(panel.grid.minor = element_blank()) +
     ylab('Age Group (years)') +
     xlab('Prevalence Ratio'))
 
