@@ -250,7 +250,6 @@ epi.2by2(strat_age_4)
 epi.2by2(strat_age_5) 
 epi.2by2(strat_age_6) 
 
-
 # age group strata row %s for EM table 3 
 prop.table(strat_age_1, margin=1)*100
 prop.table(strat_age_2, margin=1)*100
