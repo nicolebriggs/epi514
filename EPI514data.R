@@ -258,6 +258,7 @@ prop.table(strat_age_4, margin=1)*100
 prop.table(strat_age_5, margin=1)*100
 prop.table(strat_age_6, margin=1)*100
 
+
 # # sex 
 # strat_sex_1 <- with(subset(data, sexFac == "Male"),
 #                     table(divorce, vaccinated))
