@@ -189,7 +189,6 @@ prop.table(svytable(~raceFac+ divorcetable, design=survey),margin=2)*100
 prop.table(svytable(~educationFac+ divorcetable, design=survey),margin=2)*100
 prop.table(svytable(~incomeFac+ divorcetable, design=survey),margin=2)*100
 
-
 # raw missing %s 
 prop.table(with(data, table(raceFac, divorcetable, useNA = "ifany")), margin=2)*100
 prop.table(with(data, table(educationFac, divorcetable, useNA = "ifany")), margin=2)*100
@@ -231,18 +230,18 @@ epi.2by2(strat_income)
 # Evaluate: age, sex, race, education, and income
 
 # age
-strat_age_1 <- with(subset(data, ageFac == "18-24"),
-                    table(divorce, vaccinated))
-strat_age_2 <- with(subset(data, ageFac == "25-34"),
-                    table(divorce, vaccinated))
-strat_age_3 <- with(subset(data, ageFac == "35-44"),
-                    table(divorce, vaccinated))
-strat_age_4 <- with(subset(data, ageFac == "45-54"),
-                    table(divorce, vaccinated))
-strat_age_5 <- with(subset(data, ageFac == "55-64"),
-                    table(divorce, vaccinated))
-strat_age_6 <- with(subset(data, ageFac == "65 or older"),
-                    table(divorce, vaccinated))
+(strat_age_1 <- with(subset(data, ageFac == "18-24"),
+                     table(divorce, vaccinated)))
+(strat_age_2 <- with(subset(data, ageFac == "25-34"),
+                     table(divorce, vaccinated)))
+(strat_age_3 <- with(subset(data, ageFac == "35-44"),
+                     table(divorce, vaccinated)))
+(strat_age_4 <- with(subset(data, ageFac == "45-54"),
+                     table(divorce, vaccinated)))
+(strat_age_5 <- with(subset(data, ageFac == "55-64"),
+                     table(divorce, vaccinated)))
+(strat_age_6 <- with(subset(data, ageFac == "65+"),
+                     table(divorce, vaccinated)))
 # age EM analysis
 epi.2by2(strat_age_1) 
 epi.2by2(strat_age_2) 
@@ -250,6 +249,15 @@ epi.2by2(strat_age_3)
 epi.2by2(strat_age_4) 
 epi.2by2(strat_age_5) 
 epi.2by2(strat_age_6) 
+
+
+# age group strata row %s for EM table 3 
+prop.table(strat_age_1, margin=1)*100
+prop.table(strat_age_2, margin=1)*100
+prop.table(strat_age_3, margin=1)*100
+prop.table(strat_age_4, margin=1)*100
+prop.table(strat_age_5, margin=1)*100
+prop.table(strat_age_6, margin=1)*100
 
 # # sex 
 # strat_sex_1 <- with(subset(data, sexFac == "Male"),
@@ -374,4 +382,5 @@ epi.2by2(strat_age_5_em)
 strat_age_6_em <- with(subset(data, ageFac == "65 or older"),
                        table(divorce, vaccinated, em))
 epi.2by2(strat_age_6_em) 
+
 
